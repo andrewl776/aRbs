@@ -1,0 +1,15 @@
+Package: aRbs
+Title: Find Arbitrage Opportunities for Sports Matches.
+Version: 0.0.0.9000
+Authors@R: 
+    person("Andrew", "Little", 
+            email = "alittle@mango-solutions.com", 
+            role = c("aut", "cre"))
+Description: Money doesn't grow on trees. Arbs do. Find the best arbitrage opportunities of sports matches using www.oddschecker.com.
+License: GPL-2
+Imports: tidyverse, 
+         gambleR,
+         data.table,
+         devtools
+Encoding: UTF-8
+LazyData: true
