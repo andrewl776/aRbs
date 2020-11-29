@@ -10,10 +10,6 @@
 #' @export
 #'
 
-
-# TODO: Sort out this function entirely. Currently copied with minor
-# edits from {gambleR}
-
 oddschecker2 <- function (event) {
 
   # Meta information
@@ -72,53 +68,5 @@ oddschecker2 <- function (event) {
 
   # Return
   list("odds" = visible_odds, "title" = title)
-
-  # contender <- min(which(bookmakers != "")) - 1
-  # odds <- html %>% rvest::html_nodes("table.eventTable") %>% (function(s) s[[1]]) %>%
-  #   rvest::html_table(fill = TRUE)
-  # odds <- odds[-(1:which(odds[, contender] == "")[1]), ]
-  # odds <- odds[!apply(odds, 1, function(d) all(d == "" | is.na(d))),
-  #              ]
-  # rownames(odds) <- odds[, contender]
-  # names(odds) <- bookmakers
-
-  ##############################################################################
-
-  # Previously used code from {gambleR}. Keeping for now but will remove if not needed for fixes soon.
-
-  # odds <- odds[, -seq(1, contender)]
-  # odds <- odds[, sapply(odds, function(column) {
-  #   any(column != "") && !all(is.na(column))
-  # })]
-  # for (n in 1:ncol(odds)) {
-  #   odds[, n] <-  gsub("^([[:digit:]]+)$", "\\1/1", gsub("^SP$",
-  #                                                        "", odds[, n]))
-  # }
-
-  ##############################################################################
-
-  # Fix - currently odds don't seem to be filtered enough. Special offers are creeping in
-  # and giving us extra outcomes i.e. rows with no odds but just text. We will try to fix here:
-  # odds <- odds[, !is.na(names(odds))]
-  #
-  # odds <- odds %>%
-  #   # Check along rows for odds format. We can have fractional, or integers less than 4 digits (otherwise some
-  #   # code 3278223723 rows end up being kept)
-  #   apply(FUN = function(s) {
-  #     stringr::str_detect(s, pattern = "^[0-9]{1,9}\\/[0-9]+$") | stringr::str_detect(s, pattern = "^[0-9]{1,4}$")
-  #   },
-  #   MARGIN = 1) %>%
-  #   as.data.frame() %>%
-  #   # We then check which rows have a significant number of odds-looking entries (current threshold of 0.2)
-  #   purrr::map_lgl(function(s) sum(s) >= 2) %>%
-  #   # Then select these rows
-  #   (function(s) odds[s, ])
-  #
-  # if (nrow(odds) == 0) {
-  #   warning(title, " returned no rows that looked like odds.")
-  #   return(data.frame())
-  # } else if (nrow(odds) <= 2) {
-  #   warning(paste0(title, " has only ", nrow(odds), " rows."))
-  # }
 
 }
