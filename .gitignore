@@ -2,3 +2,4 @@
 .Rhistory
 *.Rcheck
 data
+inst

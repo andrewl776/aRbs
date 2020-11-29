@@ -46,7 +46,7 @@
 
 get_arbs <- function(event_list = "https://www.oddschecker.com/football",
                      in_play = FALSE,
-                     ...)
+                     print_urls = FALSE)
 {
 
   # Find individual events
@@ -71,7 +71,7 @@ get_arbs <- function(event_list = "https://www.oddschecker.com/football",
   # Get all results and progress the progress bar
   results <- purrr::map(events, function(s) {
     pb$tick()
-    get_arb_single(s, ...)
+    get_arb_single(s, print_urls = print_urls)
   })
 
 
