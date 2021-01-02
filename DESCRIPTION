@@ -1,6 +1,6 @@
 Package: aRbs
 Title: Find Arbitrage Opportunities for Sports Matches
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person("Andrew", "Little", 
             email = "andrewlittlebristol@gmail.com",
@@ -9,9 +9,9 @@ Maintainer: Andrew Little <andrewlittlebristol@gmail.com>
 Description: Money doesn't grow on trees. Arbitrage opportunities do.
     Find the best arbitrage opportunities (arbs) in sports matches through
     <https://www.oddschecker.com/>. This package allows the user to input
-    the URLs of <https://www.oddschecker.com/> subdomains in order to find
+    the URLs of <https://www.oddschecker.com/> subdomains in order to extract
     any opportunities for arbitrage. The majority of the functionality is
-    implemented using the function \code{get_arbs()}. This function first
+    implemented using the function `get_arbs()`. This function first
     finds all subdomains of the URL entered, then filters to only include
     those that look like event betting pages. Next, odds are scraped from
     the various bookmakers listed for that event, before returning combinations
@@ -28,7 +28,9 @@ Imports: data.table,
          xml2,
          rvest,
          purrr,
+         parallel,
          stats
+Depends: R (>= 3.5.0), shiny
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0

@@ -5,16 +5,23 @@
 #' the stake required for equal returns, the value of said equal returns, along with the
 #' relevant bookie for each outcome.
 #'
-#' The workhorse function, clearly, is \code{get_arb_single}, however this function
+#' The workhorse function, clearly, is \code{get_arb_single}, however \code{get_arbs}
 #' implements it iteratively, after scraping and cleaning the required inputs for each
 #' distinct call to \code{get_arb_single}. This includes finding all the sub-URLs
 #' of the homepage. A progress bar is also used as the runtime is signficant.
 #'
-#' @param event_list A URL to a www.oddschecker.com sport homepage, given as a string.
+#' @param event A URL to a www.oddschecker.com sport homepage, given as a string.
 #' @param in_play Logical. Should in-play arbitrage opportunities (arbs) also be returned?
 #' These are not likely to be accurate arbs as some bookie's odds will not be up-to-date,
 #' therefore default is \code{FALSE}.
-#' @param ... Arguments passed to \code{get_arb_single}.
+#' @param print_urls Logical. Should the URL of the event(s) be printed to the console while
+#' searching for arbitrage opportunities? Passed to \code{get_arb_single}.
+#'
+#' @param parallel Logical. Should iterative calls to \code{get_arb_single} be made in
+#' parallel.
+#'
+#' @param debug Logical. If set to \code{TRUE}, \code{print_urls} will be turned on and
+#' \code{parallel} will be turned off (so that URLs can be printed continuously).
 #'
 #' @return A list, with arbitrage information printed as series of dataframes.
 #'
@@ -28,12 +35,9 @@
 #' }
 
 
+## TODO: call all functions explicitly including from {aRbs} (this
+## seemed to cause a bug earlier propogating from get_arb_single)
 
-## TODO:
-
-# Find way to get subdomains all events
-# Find way to filter subdomains to only events (or alternatively anti-break code for non-event subdomains)
-# Query apis (look at betfair, abettor packages)
 
 
 ## Example event:
@@ -44,13 +48,21 @@
 
 #' @importFrom dplyr `%>%`
 
-get_arbs <- function(event_list = "https://www.oddschecker.com/football",
+get_arbs <- function(event = "https://www.oddschecker.com/football",
                      in_play = FALSE,
-                     print_urls = FALSE)
+                     print_urls = FALSE,
+                     parallel = TRUE,
+                     debug = FALSE)
 {
 
+  # Define args
+  if (debug) {
+    parallel <- FALSE
+    print_urls <- TRUE
+  }
+
   # Find individual events
-  events <- event_list %>%
+  events <- event %>%
     scrape_links() %>%
     clean_links()
 
@@ -60,25 +72,45 @@ get_arbs <- function(event_list = "https://www.oddschecker.com/football",
                                                    " ETA::eta. Elapsed time: :elapsed."))
   pb$tick(0)
 
+  # If desired, run in parallel, otherwise run sequentially
+  if (parallel) {
+    num_cores <- parallel::detectCores()
+    cl <- parallel::makeCluster(num_cores)
+
+    parallel::clusterExport(cl,
+                            "events",
+                            envir = environment())
+    parallel::clusterEvalQ(cl, {
+      library(aRbs)
+    })
+
+    results <- parallel::parLapply(cl, events, function(s) {
+      pb$tick()
+      Sys.sleep(0.7)
+      aRbs::get_arb_single(s, print_urls = print_urls, in_play = in_play)
+    })
+    parallel::stopCluster(cl)
+  } else {
+    # Get all results and progress the progress bar
+    results <- purrr::map(events, function(s) {
+      pb$tick()
+      get_arb_single(s, print_urls = print_urls, in_play = in_play)
+    })
+  }
+
   # Create logical vector detailing whether the events are in-play or not
-  in_play_vec <- event_list %>%
+  in_play_vec <- event %>%
     xml2::read_html() %>%
     rvest::html_nodes(xpath = "//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"all-odds-click\", \" \" ))]") %>%
     as.character() %>%
     vapply(function(s) grepl(x = s, pattern = "in-play"), logical(1), USE.NAMES = FALSE)
 
 
-  # Get all results and progress the progress bar
-  results <- purrr::map(events, function(s) {
-    pb$tick()
-    get_arb_single(s, print_urls = print_urls)
-  })
-
-
   for (i in seq_along(results)) {
     results[[i]] <- c(results[[i]], "in_play" = in_play_vec[2*i - 1])
   }
 
+  # Only keep arbs
   printed_results <- results[vapply(results, function(s) s$Arb_Opp, logical(1))]
 
   # Set names of results for user
@@ -93,74 +125,24 @@ get_arbs <- function(event_list = "https://www.oddschecker.com/football",
                                          vapply(function(s) !(s$in_play), logical(1))]
   }
 
+  # Format stake to be reduced decimal places.
+  # Note that we must convert from factor first.
+  # This is also where we convert the rownames to an
+  # outcome column
+  printed_results <- printed_results %>% purrr::map(function(s) {
+    rn <- rownames(s$best_choice)
+    s$best_choice <- s$best_choice %>%
+      dplyr::mutate(
+        Stake = round(as.numeric(as.character(Stake)), 2)
+      )
+    s$best_choice$Outcome <- rn
+    s$best_choice <- s$best_choice %>%
+      dplyr::select(Outcome, dplyr::everything())
+    s
+  })
+
   # Set new class of return object and invisibly return it
   class(printed_results) <- "arb"
   invisible(printed_results)
 }
-
-
-
-# # SCRAP -------------------------------------------------------------------
-
-
-
-#
-#
-# abettor::loginBF("andrew.little.mail@gmail.com", "Sainties1")
-# betfair::login(username = )
-#
-# # Betfair -----------------------------------------------------------------
-#
-#
-# grepl(pattern = "^[[:digit:]]", "2/1")
-#
-# # Profit = (Investment / Arbitrage %) - Investment
-#
-# # Individual bets = (Investment x Individual Arbitrage %) / Total Arbitrage %
-#
-# # Stake = (total stake x implied probability) ? combined market margin
-#
-#
-#
-# # Implied probabilities
-# imp_p_w <- c(0.4736842,
-#              0.2857143,
-#              0.2222222)
-#
-#
-# stake <- 100 *
-#
-#   stake <- (100 * imp_p)/0.9816207
-#
-# win <- (stake * c(10/9, 5/2, 7/2)) + stake
-# (profit * imp_p)
-#
-# exp_profit <-
-#
-#   # expected profit = ((profit * imp_p_w) - (stake * imp_p_l)) * 1/sum(imp_p_w)
-#
-#
-#   imp_p_l <- sum(imp_p_w) - imp_p_w
-#
-#
-#
-#
-# (53.617 + stake) * imp_p_w[1]
-# stake[1] * imp_p_l[1]
-#
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

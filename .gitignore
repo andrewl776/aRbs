@@ -3,3 +3,4 @@
 *.Rcheck
 data
 inst
+.Rprofile

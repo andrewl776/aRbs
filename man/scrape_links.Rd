@@ -7,7 +7,7 @@
 scrape_links(url)
 }
 \arguments{
-\item{url}{A head domain URl, given as a string.}
+\item{url}{A head domain URL, given as a string.}
 }
 \value{
 A \code{data.frame}.

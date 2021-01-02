@@ -4,7 +4,7 @@
 \alias{get_arb_single}
 \title{Find arbitrage opportunity information for an www.oddschecker.com event}
 \usage{
-get_arb_single(event, full = FALSE, print_urls = FALSE)
+get_arb_single(event, full = FALSE, print_urls = FALSE, in_play = TRUE)
 }
 \arguments{
 \item{event}{A www.oddschecker.com event URL, given as a string. This will be of the form:
@@ -13,7 +13,7 @@ get_arb_single(event, full = FALSE, print_urls = FALSE)
 \item{full}{A logical indicating whether or not the best bookie choices should
 still be returned for the event, even if there is no arb available.}
 
-\item{print_urls}{Logical. Should the url of the event(s) be printed to the console while
+\item{print_urls}{Logical. Should the URL of the event(s) be printed to the console while
 searching for arbitrage opportunities?}
 }
 \description{

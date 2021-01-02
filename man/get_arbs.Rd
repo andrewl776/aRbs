@@ -5,19 +5,28 @@
 \title{Find all the arbitrage opportunities for a sport homepage}
 \usage{
 get_arbs(
-  event_list = "https://www.oddschecker.com/football",
+  event = "https://www.oddschecker.com/football",
   in_play = FALSE,
-  ...
+  print_urls = FALSE,
+  parallel = TRUE,
+  debug = FALSE
 )
 }
 \arguments{
-\item{event_list}{A URL to a www.oddschecker.com sport homepage, given as a string.}
+\item{event}{A URL to a www.oddschecker.com sport homepage, given as a string.}
 
 \item{in_play}{Logical. Should in-play arbitrage opportunities (arbs) also be returned?
 These are not likely to be accurate arbs as some bookie's odds will not be up-to-date,
 therefore default is \code{FALSE}.}
 
-\item{...}{Arguments passed to \code{get_arb_single}.}
+\item{print_urls}{Logical. Should the URL of the event(s) be printed to the console while
+searching for arbitrage opportunities? Passed to \code{get_arb_single}.}
+
+\item{parallel}{Logical. Should iterative calls to \code{get_arb_single} be made in
+parallel.}
+
+\item{debug}{Logical. If set to \code{TRUE}, \code{print_urls} will be turned on and
+\code{parallel} will be turned off (so that URLs can be printed continuously).}
 }
 \value{
 A list, with arbitrage information printed as series of dataframes.
@@ -29,7 +38,7 @@ the stake required for equal returns, the value of said equal returns, along wit
 relevant bookie for each outcome.
 }
 \details{
-The workhorse function, clearly, is \code{get_arb_single}, however this function
+The workhorse function, clearly, is \code{get_arb_single}, however \code{get_arbs}
 implements it iteratively, after scraping and cleaning the required inputs for each
 distinct call to \code{get_arb_single}. This includes finding all the sub-URLs
 of the homepage. A progress bar is also used as the runtime is signficant.

@@ -10,11 +10,29 @@
 #' @export
 #'
 
-oddschecker2 <- function (event) {
+oddschecker2 <- function (event, in_play = TRUE) {
 
   # Meta information
   URL <- paste0("http://www.oddschecker.com/", event)
   html <- xml2::read_html(URL)
+
+  # Find title
+  title <- html %>%
+    rvest::html_nodes("h1") %>%
+    rvest::html_text() %>%
+    stringr::str_remove(" - Winner") %>%
+    stringr::str_remove(" Betting Odds")
+
+  # Find whether event is in-play
+  is_in_play <- html %>%
+    rvest::html_nodes(".no-arrow.in-play") %>%
+    length() %>%
+    (function(s) s == 1)
+
+  # If not reporting in-play games and game is in-play, return null df
+  if (!in_play && is_in_play) {
+    return(list("odds" = data.frame(), "title" = title))
+  }
 
   #location <- stringr::str_trim(stringr::str_extract(title, "^[^[:digit:]]*"))
   #time <- stringr::str_trim(stringr::str_extract(title, "[:digit:][:digit:]:[:digit:][:digit:]"))
@@ -30,29 +48,29 @@ oddschecker2 <- function (event) {
                        })
   bookmakers <- bookmakers[bookmakers != ""]
 
-  # Add non-bookie fix
-  if (length(bookmakers) == 0) return(data.frame())
 
+  # Add non-bookie fix
+  if (length(bookmakers) == 0) {
+    return(list("odds" = data.frame(), "title" = title))
+  }
   # Find possible outcomes (as.vector)
   outcomes <- html %>%
     rvest::html_nodes("tr.diff-row.evTabRow.bc") %>%
     rvest::html_attr("data-bname")
 
-  # Find title
-  title <- html %>%
-    rvest::html_nodes("h1") %>%
-    rvest::html_text() %>%
-    stringr::str_remove(" - Winner") %>%
-    stringr::str_remove(" Betting Odds")
-
   # Odds table
   visible_odds <- html %>%
-    rvest::html_nodes(".bc.bs, .np") %>%
+    rvest::html_nodes(".bc, .np") %>%
     rvest::html_attr("data-o") %>%
+    stats::na.omit() %>%
     matrix(nrow = length(outcomes), byrow = TRUE,
            dimnames = list(outcomes, bookmakers)) %>%
     as.data.frame(stringsAsFactors = FALSE)
 
+
+  html %>%
+    rvest::html_nodes(".o.bc.bs") %>%
+    rvest::html_attr("data-o")
 
   make_all_odds_fractional <- function(string) {
     purrr::map_chr(string, function(.x) {

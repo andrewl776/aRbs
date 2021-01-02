@@ -17,5 +17,5 @@ An S3 method for printing objects of class \code{arb}. This will print the
 \code{best_choice} elements from
 }
 \details{
-Prints the the best choices of arbitrage opportunities, objects cn.
+Prints the the best choices of arbitrage opportunities.
 }

@@ -3,6 +3,7 @@
 export(clean_links)
 export(get_arb_single)
 export(get_arbs)
+export(get_arbs_shiny)
 export(oddschecker2)
 export(scrape_links)
 importFrom(dplyr,`%>%`)

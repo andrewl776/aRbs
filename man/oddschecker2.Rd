@@ -4,7 +4,7 @@
 \alias{oddschecker2}
 \title{Find the odds of each outcome of an event from www.oddschecker.com}
 \usage{
-oddschecker2(event)
+oddschecker2(event, in_play = TRUE)
 }
 \arguments{
 \item{event}{A www.oddschecker.com event path, given as a string. This is essentially

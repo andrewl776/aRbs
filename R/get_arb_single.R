@@ -19,21 +19,25 @@
 #' @param full A logical indicating whether or not the best bookie choices should
 #' still be returned for the event, even if there is no arb available.
 #'
-#' @param print_urls Logical. Should the url of the event(s) be printed to the console while
+#' @param print_urls Logical. Should the URL of the event(s) be printed to the console while
 #' searching for arbitrage opportunities?
 #'
 #' @export
 
-get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
+get_arb_single <- function(
+  event, full = FALSE,
+  print_urls = FALSE,
+  in_play = TRUE
+  ) {
 
   # For debugging
   if (print_urls) {print.default(event)}
 
-
   event <- stringr::str_remove(event, pattern = "https://www.oddschecker.com/")
-  odds <- oddschecker2(event)   # possible error here when we have an event that doesn't seem to go to a page (likely it has just been removed)
+  odds <- oddschecker2(event, in_play = in_play)   # possible error here when we have an event that doesn't seem to go to a page (likely it has just been removed)
 
   odds_df <- odds$odds
+  title <- odds$title
 
   # Bug where event no longer exists means oddschecker2(event) returns an empty
   # df (which in itself is a fix). Therefore, to avoid causing a breakage here
@@ -44,7 +48,8 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
       "p_omega" = Inf,
       "Win" = 0.1,
       "Arb_Opp" = FALSE,
-      "best_choice" = data.frame()
+      "best_choice" = data.frame(),
+      "event" = event
     ))
   }
 
@@ -59,10 +64,6 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
     #outcomes <- odds_df[, 1]
   }
 
-  #else {
-  #  outcomes <- rownames(odds_df)
-  #}
-
   # Remove null divider column...
   odds_df <- odds_df %>%
     dplyr::select(
@@ -70,29 +71,6 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
     ) %>%
     # ... and bookies not offering any odds
     dplyr::select_if(~ dplyr::n_distinct(c(., "")) != 1)
-
-  # Remove non-odds rows
-
-  # Find rows that are truly odds
-  # odds_TF <- odds_df %>%
-  #   apply(MARGIN = 1, FUN =
-  #           function(s) {
-  #             !all(
-  #               !grepl(s, pattern = "\\d/\\d")
-  #             )
-  #           }
-  #   )
-
-
-  # odds_df <- odds_df %>%
-  #   dplyr::filter(
-  #     odds_TF
-  #   )
-
-  # names(odds_df) <- names(odds_df) %>%
-  #   as.list() %>%
-  #   purrr::map(remove_form) %>%
-  #   unlist()
 
   # Find implied probability of each outcome for each bookie
   bookie_outcome_p <-
@@ -110,7 +88,6 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
     lapply(function(s) {
       min(c(s, 1), na.rm = TRUE)
     })
-
 
 
   # Find bookie name for best odds
@@ -151,9 +128,6 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
   win <- stake * returns_multiplier
 
 
-
-  #### TODO - Work out why we get to here with no odds? Even if there is no arb opp, we should still be able to find the best odds.
-
   # Combine results to nice list
   best_choice <- mapply(
     c,
@@ -168,21 +142,10 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
     t() %>%
     data.frame(row.names = rownames(odds_df))
 
-  # Add on dollar symbol and convert to currency. Use {base} here as
-  # dplyr removes rownames
-  # Round for neat reporting AFTER calculations. Convert to currency (note: encoding errors could occur here..)
-  # best_choice$stake <- best_choice$stake %>%
-  #   as.numeric() %l>%
-  #   formatC(37.1, digits = 2, flag = "0", format = "f") %>%
-  #   paste0("$", .)
-
-
-
   # Supply names
   colnames(best_choice) <- c("Bookie",
                              "Odds",
                              "Stake")
-  title <- odds$title
 
   # Return
   if (impl_prob_omeg < 1 | full) {
@@ -191,14 +154,16 @@ get_arb_single <- function(event, full = FALSE, print_urls = FALSE) {
       "p_omega" = impl_prob_omeg,
       "Win" = unique(round(win, 2)),
       "Arb_Opp" = impl_prob_omeg < 1,
-      "best_choice" = best_choice
+      "best_choice" = best_choice,
+      "event" = event
     ))
   } else {
     list(
       "title" = title,
       "p_omega" = impl_prob_omeg,
       "Win" = unique(round(win, 2)),
-      "Arb_Opp" = impl_prob_omeg < 1
+      "Arb_Opp" = impl_prob_omeg < 1,
+      "event" = event
     )
   }
 
