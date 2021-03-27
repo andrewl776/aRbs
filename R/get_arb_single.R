@@ -22,6 +22,8 @@
 #' @param print_urls Logical. Should the URL of the event(s) be printed to the console while
 #' searching for arbitrage opportunities?
 #'
+#' @param in_play Logical. Should in-play arbitrage opportunities (arbs) also be returned?
+#'
 #' @export
 
 get_arb_single <- function(

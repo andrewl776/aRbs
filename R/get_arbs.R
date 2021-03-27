@@ -1,4 +1,5 @@
-#' Find all the arbitrage opportunities for a sport homepage
+#' Find Arbitrage Opportunities
+#'
 #'
 #' Input a sport homepage URL as a string and return a list of arbitrage information.
 #' This will also print dataframes with details of the arbitrage opportunities, including
@@ -11,9 +12,11 @@
 #' of the homepage. A progress bar is also used as the runtime is signficant.
 #'
 #' @param event A URL to a www.oddschecker.com sport homepage, given as a string.
+#'
 #' @param in_play Logical. Should in-play arbitrage opportunities (arbs) also be returned?
 #' These are not likely to be accurate arbs as some bookie's odds will not be up-to-date,
 #' therefore default is \code{FALSE}.
+#'
 #' @param print_urls Logical. Should the URL of the event(s) be printed to the console while
 #' searching for arbitrage opportunities? Passed to \code{get_arb_single}.
 #'
@@ -25,7 +28,6 @@
 #'
 #' @return A list, with arbitrage information printed as series of dataframes.
 #'
-#' @export
 #'
 #' @examples
 #'
@@ -33,6 +35,9 @@
 #' get_arbs()
 #' get_arbs("https://www.oddschecker.com/football") # equivalent to get_arbs()
 #' }
+#'
+#' @export
+#' @importFrom dplyr `%>%`
 
 
 ## TODO: call all functions explicitly including from {aRbs} (this
@@ -42,11 +47,11 @@
 
 ## Example event:
 
-# "https://www.oddschecker.com/football/belarus/premier-league/dinamo-brest-v-isloch/winner)"
+## "https://www.oddschecker.com/football/belarus/premier-league/dinamo-brest-v-isloch/winner)"
 
 # Fetch results for all links ------------------------------------------------------------------
 
-#' @importFrom dplyr `%>%`
+
 
 get_arbs <- function(event = "https://www.oddschecker.com/football",
                      in_play = FALSE,
@@ -92,7 +97,7 @@ get_arbs <- function(event = "https://www.oddschecker.com/football",
     parallel::stopCluster(cl)
   } else {
     # Get all results and progress the progress bar
-    results <- purrr::map(events, function(s) {
+    results <- lapply(events, function(s) {
       pb$tick()
       get_arb_single(s, print_urls = print_urls, in_play = in_play)
     })
@@ -141,8 +146,17 @@ get_arbs <- function(event = "https://www.oddschecker.com/football",
     s
   })
 
+  # Sort by highest win
+  arb_order <- printed_results %>%
+    lapply(function(s) s$Win) %>% unlist() %>%
+    sort(decreasing = TRUE) %>% names()
+
+  printed_results <- printed_results[arb_order]
+
   # Set new class of return object and invisibly return it
   class(printed_results) <- "arb"
   invisible(printed_results)
 }
 
+# Set globals
+utils::globalVariables(c("Outcome", "Stake"))

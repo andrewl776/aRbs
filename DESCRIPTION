@@ -1,6 +1,6 @@
 Package: aRbs
 Title: Find Arbitrage Opportunities for Sports Matches
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Andrew", "Little", 
             email = "andrewlittlebristol@gmail.com",
@@ -11,14 +11,14 @@ Description: Money doesn't grow on trees. Arbitrage opportunities do.
     <https://www.oddschecker.com/>. This package allows the user to input
     the URLs of <https://www.oddschecker.com/> subdomains in order to extract
     any opportunities for arbitrage. The majority of the functionality is
-    implemented using the function `get_arbs()`. This function first
-    finds all subdomains of the URL entered, then filters to only include
-    those that look like event betting pages. Next, odds are scraped from
-    the various bookmakers listed for that event, before returning combinations
-    of bookmakers, odds or outcomes that could be used for arbitrage. Bets
-    placed subsequently are done so at bettor's risk and we take no
-    responsibility for losses that may occur from use of this package. Odds
-    subject to instantaneous changes.
+    implemented using the function `get_arbs_shiny()`, which simply provides an
+    easy-to-use interface wrapping the functionality of the `get_arbs()` function.
+    This function first finds all subdomains of the URL entered, then filters to
+    only include those that look like event betting pages. Next, odds are scraped
+    from the various bookmakers listed for that event, before returning 
+    combinations of bookmakers, odds or outcomes that could be used for arbitrage.
+    Bets placed subsequently are done so at bettor's risk. Please see 
+    package README for full details.
 License: GPL-2
 Imports: data.table,
          crayon,
@@ -29,8 +29,11 @@ Imports: data.table,
          rvest,
          purrr,
          parallel,
-         stats
-Depends: R (>= 3.5.0), shiny
+         stats,
+         shiny,
+         shinydashboard,
+         shinycssloaders
+Depends: R (>= 3.5.0)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

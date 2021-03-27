@@ -15,6 +15,8 @@ still be returned for the event, even if there is no arb available.}
 
 \item{print_urls}{Logical. Should the URL of the event(s) be printed to the console while
 searching for arbitrage opportunities?}
+
+\item{in_play}{Logical. Should in-play arbitrage opportunities (arbs) also be returned?}
 }
 \description{
 Find (among other information) the implied total probability of all listed

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_arbs.R
 \name{get_arbs}
 \alias{get_arbs}
-\title{Find all the arbitrage opportunities for a sport homepage}
+\title{Find Arbitrage Opportunities}
 \usage{
 get_arbs(
   event = "https://www.oddschecker.com/football",
@@ -49,4 +49,5 @@ of the homepage. A progress bar is also used as the runtime is signficant.
 get_arbs()
 get_arbs("https://www.oddschecker.com/football") # equivalent to get_arbs()
 }
+
 }

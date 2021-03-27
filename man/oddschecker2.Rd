@@ -9,6 +9,9 @@ oddschecker2(event, in_play = TRUE)
 \arguments{
 \item{event}{A www.oddschecker.com event path, given as a string. This is essentially
 an event URL with the "www.oddschecker.com/" base removed.}
+
+\item{in_play}{Logical. Should in-play arbitrage opportunities (arbs) also be returned?
+If \code{FALSE} and event is in-play, then a NULL \code{data.frame} is returned.}
 }
 \description{
 Find the odds for each of the listed outcomes of an event on www.oddschecker.com, for

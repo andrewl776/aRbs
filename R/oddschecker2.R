@@ -6,7 +6,9 @@
 #'
 #' @param event A www.oddschecker.com event path, given as a string. This is essentially
 #'  an event URL with the "www.oddschecker.com/" base removed.
-#
+#'
+#' @param in_play Logical. Should in-play arbitrage opportunities (arbs) also be returned?
+#' If \code{FALSE} and event is in-play, then a NULL \code{data.frame} is returned.
 #' @export
 #'
 
