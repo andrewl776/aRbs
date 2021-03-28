@@ -11,6 +11,7 @@
 #' @param ... Arguments passed to \code{base::print.default()}.
 #'
 #' @method print arb
+#' @export
 
 
 print.arb <- function(arb, ...) {
