@@ -3,13 +3,18 @@ title: "NEWS"
 output: html_document
 ---
 
+### Version 0.1.2
+- Updated README to give installation instructions.
+- Exported `print.arb` method.
+- Fixed CRAN warnings and errors.
+
 ### Version 0.1.1
-- Fixed bug that broke `get_arbs_shiny`.
+- Fixed bug that broke `get_arbs_shiny()`.
 - Shiny app has new button to open link in external tab.
 
 ### Version 0.1.0
 - Improved scraping code in `oddschecker2()` - almost a complete rewrite. Little resemblance now to the `oddschecker()` function from **{gambleR}**. 
-- Removed majority of cleaning in `get_arb_single()` as no longer necessary due to `oddschecker2()` changes. This results in a much faster implementation of `get_arb_single()` and in turn `get_arbs`.
+- Removed majority of cleaning in `get_arb_single()` as no longer necessary due to `oddschecker2()` changes. This results in a much faster implementation of `get_arb_single()` and in turn `get_arbs()`.
 - Function `get_arbs()` now calls `get_arb_single()` in parallel, vastly reducing runtime. This can be disabled by setting `parallel = FALSE`.
 - New function `get_arbs_shiny()` implements the function 
 `get_arbs()`, through an easy-to-use interface. I expect this therefore to be the most used function in the package.

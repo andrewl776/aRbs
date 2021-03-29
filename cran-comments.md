@@ -1,0 +1,1 @@
+Fixed CRAN check issues. 

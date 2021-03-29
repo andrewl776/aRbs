@@ -9,7 +9,7 @@
 #' The workhorse function, clearly, is \code{get_arb_single}, however \code{get_arbs}
 #' implements it iteratively, after scraping and cleaning the required inputs for each
 #' distinct call to \code{get_arb_single}. This includes finding all the sub-URLs
-#' of the homepage. A progress bar is also used as the runtime is signficant.
+#' of the homepage. A progress bar is also used as the runtime is significant.
 #'
 #' @param event A URL to a www.oddschecker.com sport homepage, given as a string.
 #'
@@ -79,7 +79,20 @@ get_arbs <- function(event = "https://www.oddschecker.com/football",
 
   # If desired, run in parallel, otherwise run sequentially
   if (parallel) {
-    num_cores <- parallel::detectCores()
+
+    # Define number of cores
+    # Reduce number of cores if there is a limit env variable. This allows
+    # example to run on CRAN
+    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+    if (nzchar(chk) && chk == "TRUE") {
+      # use 2 cores in CRAN/Travis/AppVeyor
+      num_cores <- 2L
+    } else {
+      # use all cores in devtools::test()
+      num_cores <- parallel::detectCores()
+    }
+
+    # Make cluster
     cl <- parallel::makeCluster(num_cores)
 
     parallel::clusterExport(cl,

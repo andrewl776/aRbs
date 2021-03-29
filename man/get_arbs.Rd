@@ -41,7 +41,7 @@ relevant bookie for each outcome.
 The workhorse function, clearly, is \code{get_arb_single}, however \code{get_arbs}
 implements it iteratively, after scraping and cleaning the required inputs for each
 distinct call to \code{get_arb_single}. This includes finding all the sub-URLs
-of the homepage. A progress bar is also used as the runtime is signficant.
+of the homepage. A progress bar is also used as the runtime is significant.
 }
 \examples{
 

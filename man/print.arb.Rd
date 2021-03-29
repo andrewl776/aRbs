@@ -4,10 +4,10 @@
 \alias{print.arb}
 \title{Print method for class arb}
 \usage{
-\method{print}{arb}(arb, ...)
+\method{print}{arb}(x, ...)
 }
 \arguments{
-\item{arb}{An object of class \code{arb} - usually the output of a call to
+\item{x}{An object of class \code{arb} - usually the output of a call to
 \code{get_arbs()}}
 
 \item{...}{Arguments passed to \code{base::print.default()}.}
