@@ -1,3 +1,5 @@
 ^aRbs\.Rproj$
 ^\.Rproj\.user$
 ^CRAN-RELEASE$
+cran-comments.md
+.github
