@@ -29,13 +29,6 @@
 #' @return A list, with arbitrage information printed as series of dataframes.
 #'
 #'
-#' @examples
-#'
-#' \donttest{
-#' get_arbs()
-#' get_arbs("https://www.oddschecker.com/football") # equivalent to get_arbs()
-#' }
-#'
 #' @export
 #' @importFrom dplyr `%>%`
 
@@ -53,12 +46,12 @@
 
 
 
-get_arbs <- function(event = "https://www.oddschecker.com/football",
-                     in_play = FALSE,
-                     print_urls = FALSE,
-                     parallel = TRUE,
-                     debug = FALSE)
-{
+get_arbs <- function(
+  event = "https://www.oddschecker.com/football",
+  in_play = FALSE,
+  print_urls = FALSE,
+  parallel = TRUE,
+  debug = FALSE) {
 
   # Define args
   if (debug) {

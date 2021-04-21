@@ -43,11 +43,3 @@ implements it iteratively, after scraping and cleaning the required inputs for e
 distinct call to \code{get_arb_single}. This includes finding all the sub-URLs
 of the homepage. A progress bar is also used as the runtime is significant.
 }
-\examples{
-
-\donttest{
-get_arbs()
-get_arbs("https://www.oddschecker.com/football") # equivalent to get_arbs()
-}
-
-}

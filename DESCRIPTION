@@ -1,6 +1,6 @@
 Package: aRbs
 Title: Find Arbitrage Opportunities for Sports Matches
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: 
     person("Andrew", "Little", 
             email = "andrewlittlebristol@gmail.com",
@@ -34,7 +34,11 @@ Imports: data.table,
          shinydashboard,
          shinycssloaders,
          DT,
-         shinyBS
+         shinyBS,
+         dlstats,
+         ggplot2,
+         lubridate,
+         utils
 Depends: R (>= 3.5.0)
 Encoding: UTF-8
 RoxygenNote: 7.1.1

@@ -3,6 +3,11 @@ title: "NEWS"
 output: html_document
 ---
 
+### Version 0.1.3
+- New internal function `plot_downloads()` to check CRAN download stats per day.
+- Removed `get_arbs()` example as it ran all cores on CRAN and produced a policy violation.
+- Tennis added as new subdomain.
+
 ### Version 0.1.2
 - Updated README to give installation instructions.
 - Exported `print.arb` method.
