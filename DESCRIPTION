@@ -38,8 +38,7 @@ Imports: data.table,
          dlstats,
          ggplot2,
          lubridate,
-         utils,
-         usethis
+         utils
 Depends: R (>= 3.5.0)
 Encoding: UTF-8
 RoxygenNote: 7.1.1
