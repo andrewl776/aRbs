@@ -8,13 +8,19 @@
 ### Installing and Using `{aRbs}`.
 
 - To install the package from CRAN, run:
-`install.packages("aRbs")`
+```{r, eval=FALSE}
+install.packages("aRbs")
+```
 
 - Then load the package:
-`library(aRbs)`
+```{r, eval=FALSE}
+library(aRbs)
+```
 
 - Finally, launch the shiny app:
-`get_arbs_shiny()`
+```{r, eval=FALSE}
+get_arbs_shiny()
+```
 
 ### Disclaimer
 
