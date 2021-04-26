@@ -1,13 +1,13 @@
 
-<!-- badges: start -->
 ```{r badges, include=FALSE}
 usethis::use_cran_badge()
 usethis::use_badge("downloads", src = "https://cranlogs.r-pkg.org/badges/aRbs", href = "downloads")
 ```
 
+<!-- badges: start -->
 [![downloads](https://cranlogs.r-pkg.org/badges/aRbs)](downloads)
-<!-- badges: end -->
 [![CRAN status](https://www.r-pkg.org/badges/version/aRbs)](https://CRAN.R-project.org/package=aRbs)
+<!-- badges: end -->
 
 
 ### Installing and Using `{aRbs}`.
