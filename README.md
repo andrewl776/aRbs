@@ -4,6 +4,8 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/aRbs)](https://CRAN.R-project.org/package=aRbs)
 <!-- badges: end -->
 
+### CRAN
+This package is also available on CRAN: https://cran.r-project.org/web/packages/aRbs/index.html
 
 ### Installing and Using `{aRbs}`.
 
