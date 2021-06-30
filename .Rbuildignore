@@ -3,3 +3,4 @@
 ^CRAN-RELEASE$
 cran-comments.md
 .github
+^\.github$
