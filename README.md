@@ -2,6 +2,7 @@
 <!-- badges: start -->
 [![downloads](https://cranlogs.r-pkg.org/badges/aRbs)](downloads)
 [![CRAN status](https://www.r-pkg.org/badges/version/aRbs)](https://CRAN.R-project.org/package=aRbs)
+[![R-CMD-check](https://github.com/andrewl776/aRbs/actions/workflows/check-release.yaml/badge.svg)](https://github.com/andrewl776/aRbs/actions/workflows/check-release.yaml)
 <!-- badges: end -->
  
 ### CRAN
